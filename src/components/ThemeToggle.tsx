@@ -88,7 +88,7 @@ export default function ThemeToggle() {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`颜色主题：${THEMES.find((t) => t.value === theme)?.label ?? "跟随系统"}`}
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
+        className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground shadow-sm transition-colors duration-150 hover:bg-muted hover:text-foreground"
       >
         <CurrentIcon className="h-[18px] w-[18px]" aria-hidden="true" />
       </button>
@@ -97,7 +97,7 @@ export default function ThemeToggle() {
         <div
           role="menu"
           aria-label="颜色主题"
-          className="absolute right-0 top-12 z-50 w-44 rounded-xl border border-border bg-card p-1.5 shadow-lg shadow-black/10"
+          className="surface-card absolute right-0 top-12 z-50 w-44 p-1.5 shadow-xl"
         >
           {THEMES.map(({ value, label, icon: Icon }) => (
             <button

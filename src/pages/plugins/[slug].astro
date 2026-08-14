@@ -1,6 +1,5 @@
 ---
 import PluginLayout from "@/layouts/PluginLayout.astro";
-import PluginIcon from "@/components/PluginIcon.astro";
 import TagBadge from "@/components/TagBadge.astro";
 import InstallPanel from "@/components/InstallBox";
 import { plugins } from "@/data/plugins";
@@ -48,25 +47,23 @@ const linkRows = [
 ---
 
 <PluginLayout plugin={plugin}>
-  <div class="shell py-10 sm:py-14">
+  <div class="shell py-8 sm:py-12">
     <a
       href="/plugins"
-      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-accent"
     >
       <ArrowLeft className="h-4 w-4" aria-hidden="true" />
       全部插件
     </a>
 
     <!-- Header card -->
-    <div class="mt-6 rounded-2xl border border-border bg-card p-6 sm:p-8">
+    <div class="surface-card relative mt-6 overflow-hidden p-5 before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-accent sm:p-8">
       <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-        <div class="flex items-start gap-4 sm:gap-5">
-          <PluginIcon plugin={plugin} size={64} class="rounded-xl" />
-          <div class="min-w-0">
+        <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-2">
-              <h1 class="font-display text-2xl font-bold tracking-tight sm:text-3xl">{plugin.name}</h1>
+              <h1 class="font-display text-2xl font-bold tracking-[-0.035em] sm:text-3xl">{plugin.name}</h1>
               {plugin.example && (
-                <span class="rounded border border-accent/40 bg-accent-soft/70 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-accent">
+                <span class="rounded-md border border-accent/35 bg-accent-soft/70 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-accent">
                   示例
                 </span>
               )}
@@ -76,7 +73,7 @@ const linkRows = [
                 </span>
               )}
             </div>
-            <p class="mt-2 max-w-xl leading-relaxed text-muted-foreground">{plugin.description}</p>
+            <p class="mt-2 max-w-xl text-[15px] leading-7 text-muted-foreground">{plugin.description}</p>
             <div class="mt-4 flex flex-wrap items-center gap-1.5">
               {plugin.tags.map((t) => (
                 <TagBadge tag={t} />
@@ -99,7 +96,6 @@ const linkRows = [
                 </>
               )}
             </p>
-          </div>
         </div>
 
         <div class="flex flex-wrap gap-2 lg:shrink-0">
@@ -112,8 +108,8 @@ const linkRows = [
                 rel="noopener noreferrer"
                 class={
                   l.name === "仓库"
-                    ? "inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent hover:text-white dark:hover:text-black"
-                    : "inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent/60 hover:text-foreground"
+                    ? "inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground shadow-sm transition-opacity duration-150 hover:opacity-90"
+                    : "inline-flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-semibold text-muted-foreground shadow-sm transition-colors duration-150 hover:border-accent/50 hover:text-foreground"
                 }
               >
                 <Icon className="h-4 w-4" aria-hidden="true" />
@@ -128,7 +124,7 @@ const linkRows = [
 
     {
       deprecated && (
-        <div class="mt-6 flex items-start gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-300">
+        <div class="mt-6 flex items-start gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm leading-6 text-amber-800 dark:text-amber-300">
           <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <p>
             该插件已不再积极维护。它保留在目录中供参考——请到仓库中查看 fork
@@ -138,56 +134,69 @@ const linkRows = [
       )
     }
 
-    <!-- 插件介绍 -->
-    <section class="mt-10 sm:mt-12">
-      <h2 class="font-display text-lg font-semibold tracking-tight">插件介绍</h2>
-      <p class="mt-3 max-w-3xl leading-relaxed text-muted-foreground">
-        {plugin.longDescription ?? plugin.description}
-      </p>
-    </section>
+    <div class="mt-8 grid min-w-0 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-8">
+      <div class="min-w-0 space-y-6">
+        <!-- 插件介绍 -->
+        <section class="surface-card min-w-0 overflow-hidden p-5 sm:p-6">
+          <p class="page-eyebrow">概览</p>
+          <h2 class="mt-2 font-display text-xl font-semibold tracking-tight">插件介绍</h2>
+          <p class="mt-4 whitespace-pre-line text-[15px] leading-7 text-muted-foreground">
+            {plugin.longDescription ?? plugin.description}
+          </p>
+        </section>
 
-    <!-- 安装 -->
-    <section class="mt-10 sm:mt-12">
-      <h2 class="flex items-center gap-2 font-display text-lg font-semibold tracking-tight">
-        <Terminal className="h-4 w-4 text-accent" aria-hidden="true" />
-        安装
-      </h2>
-      <p class="mt-2 max-w-3xl text-sm text-muted-foreground">
-        请在您自己的终端中执行这些命令——本站只负责展示与复制，绝不代您执行任何命令。
-      </p>
-      <div class="mt-5 max-w-3xl">
-        <InstallPanel client:load methods={plugin.installMethods} />
+        <!-- 安装 -->
+        <section class="surface-card min-w-0 overflow-hidden p-5 sm:p-6">
+          <h2 class="flex items-center gap-2.5 font-display text-xl font-semibold tracking-tight">
+            <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-accent-soft text-accent">
+              <Terminal className="h-4 w-4" aria-hidden="true" />
+            </span>
+            安装
+          </h2>
+          <p class="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
+            请在自己的终端中执行这些命令。本站只负责展示与复制，不会代您执行任何内容。
+          </p>
+          <div class="mt-5">
+            <InstallPanel client:load methods={plugin.installMethods} />
+          </div>
+        </section>
       </div>
-    </section>
 
-    <!-- 相关链接 -->
-    <section class="mt-10 sm:mt-12">
-      <h2 class="font-display text-lg font-semibold tracking-tight">相关链接</h2>
-      <ul class="mt-3 max-w-3xl divide-y divide-border rounded-xl border border-border bg-card">
-        {linkRows.map((l) => {
-          const Icon = l.icon;
-          return (
-            <li>
-              <a
-                href={l.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="group flex items-center gap-3 px-4 py-3.5 transition-colors duration-150 hover:bg-muted/50"
-              >
-                <Icon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-                <span class="text-sm font-medium">{l.name}</span>
-                <span class="ml-auto min-w-0 flex-1 truncate text-right font-mono text-xs text-muted-foreground sm:max-w-md">
-                  {l.href.replace(/^https?:\/\//, "")}
-                </span>
-                <ExternalLink
-                  className="h-4 w-4 shrink-0 text-muted-foreground transition-colors duration-150 group-hover:text-accent"
-                  aria-hidden="true"
-                />
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
+      <!-- 相关链接 -->
+      <aside class="surface-card overflow-hidden lg:sticky lg:top-24">
+        <div class="border-b border-border bg-surface/45 px-4 py-3.5">
+          <h2 class="font-display text-sm font-semibold tracking-tight">相关链接</h2>
+        </div>
+        <ul class="divide-y divide-border">
+          {linkRows.map((l) => {
+            const Icon = l.icon;
+            return (
+              <li>
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="group flex items-center gap-3 px-4 py-3.5 transition-colors duration-150 hover:bg-accent-soft/35"
+                >
+                  <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-surface text-muted-foreground transition-colors group-hover:bg-accent-soft group-hover:text-accent">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-semibold">{l.name}</span>
+                    <span class="mt-0.5 block truncate font-mono text-[10px] text-muted-foreground">
+                      {l.href.replace(/^https?:\/\//, "")}
+                    </span>
+                  </span>
+                  <ExternalLink
+                    className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-colors duration-150 group-hover:text-accent"
+                    aria-hidden="true"
+                  />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </aside>
+    </div>
   </div>
 </PluginLayout>

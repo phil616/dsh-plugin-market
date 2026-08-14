@@ -75,17 +75,3 @@ export function getHelpPlugins(plugins: Plugin[]): Plugin[] {
 export function getFeaturedPlugins(plugins: Plugin[]): Plugin[] {
   return sortPlugins(plugins).filter((p) => p.featured);
 }
-
-/** Deterministic pastel-ish hue for the letter placeholder of a plugin. */
-export function placeholderHue(slug: string): number {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) {
-    hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
-  }
-  return hash % 360;
-}
-
-/** First letter of the plugin name, used as the placeholder icon glyph. */
-export function placeholderLetter(plugin: Plugin): string {
-  return (plugin.name.trim()[0] ?? "?").toUpperCase();
-}

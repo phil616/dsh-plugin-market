@@ -2,12 +2,11 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-border">
-  <div class="shell py-12">
+<footer class="border-t border-border bg-surface/35">
+  <div class="shell py-10 sm:py-12">
     <div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
       <div class="max-w-md">
-        <div class="flex items-center gap-2.5">
-          <img src="/logo.svg" alt="" width="24" height="24" />
+        <div class="flex items-center">
           <span class="font-display text-[15px] font-semibold tracking-tight">
             DeepSeek Harness<span class="text-accent">插件市场</span>
           </span>
@@ -18,7 +17,7 @@ const year = new Date().getFullYear();
         </p>
       </div>
 
-      <nav class="grid grid-cols-2 gap-x-12 gap-y-2 text-sm" aria-label="页脚">
+      <nav class="grid grid-cols-2 gap-x-10 gap-y-3 text-sm" aria-label="页脚">
         <a href="/plugins" class="text-muted-foreground transition-colors duration-150 hover:text-foreground">
           全部插件
         </a>
@@ -37,14 +36,14 @@ const year = new Date().getFullYear();
           rel="noopener noreferrer"
           class="text-muted-foreground transition-colors duration-150 hover:text-foreground"
         >
-          GitHub
+          项目源码
         </a>
       </nav>
     </div>
 
     <div class="mt-10 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
       <p>© {year} DeepSeek Harness插件市场贡献者</p>
-      <p class="font-mono">100% 静态站点 — 无后端，无追踪</p>
+      <p class="font-mono">纯静态站点 · 无后端 · 无追踪</p>
     </div>
   </div>
 </footer>

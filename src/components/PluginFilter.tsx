@@ -11,17 +11,21 @@ interface Props {
 }
 
 function pill(active: boolean): string {
-  return `h-8 rounded-full border px-3 text-xs font-medium transition-colors duration-150 ${
+  return `h-9 shrink-0 rounded-full border px-3.5 text-xs font-semibold transition-[color,background-color,border-color,box-shadow] duration-150 ${
     active
-      ? "border-accent bg-accent text-white dark:text-black"
-      : "border-border bg-card text-muted-foreground hover:border-accent/60 hover:text-foreground"
+      ? "border-accent bg-accent text-accent-foreground shadow-sm"
+      : "border-border bg-card text-muted-foreground hover:border-accent/50 hover:bg-accent-soft/45 hover:text-foreground"
   }`;
 }
 
 export default function PluginFilter({ tags, activeTag, onTagChange, sort, onSortChange }: Props) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div role="group" aria-label="按标签筛选" className="flex flex-wrap items-center gap-1.5">
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+      <div
+        role="group"
+        aria-label="按标签筛选"
+        className="scrollbar-none -mx-1 flex items-center gap-2 overflow-x-auto px-1 pb-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
+      >
         <button
           type="button"
           onClick={() => onTagChange(null)}
@@ -43,7 +47,7 @@ export default function PluginFilter({ tags, activeTag, onTagChange, sort, onSor
         ))}
       </div>
 
-      <div className="relative w-full sm:w-auto">
+      <div className="relative w-full shrink-0 sm:w-auto">
         <label htmlFor="plugin-sort" className="sr-only">
           插件排序
         </label>
@@ -51,7 +55,7 @@ export default function PluginFilter({ tags, activeTag, onTagChange, sort, onSor
           id="plugin-sort"
           value={sort}
           onChange={(e) => onSortChange(e.target.value as SortMode)}
-          className="h-9 w-full appearance-none rounded-lg border border-border bg-card pl-3 pr-9 text-sm text-foreground outline-none transition-colors duration-150 hover:border-accent/60 focus:border-accent/60 focus:ring-2 focus:ring-ring/40 sm:w-44"
+          className="h-10 w-full appearance-none rounded-xl border border-border bg-card pl-3.5 pr-10 text-sm font-medium text-foreground shadow-sm outline-none transition-[border-color,box-shadow] duration-150 hover:border-muted-foreground/40 focus:border-accent focus:ring-4 focus:ring-ring/15 sm:w-44"
         >
           <option value="featured">精选优先</option>
           <option value="name-asc">名称 A–Z</option>

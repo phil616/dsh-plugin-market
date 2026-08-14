@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import PluginGrid from "@/components/PluginGrid.astro";
 import { plugins } from "@/data/plugins";
 import { getHelpPlugins } from "@/utils/plugin";
@@ -11,16 +12,13 @@ const helpPlugins = getHelpPlugins(plugins);
   title="帮助 — DeepSeek Harness插件市场"
   description="帮助类目收录与 DeepSeek Harness 相关的文档、资源与软件等辅助条目——它们同样是插件项目，但通常不是智能体工具，而是参考资料与辅助资源。"
 >
-  <div class="shell py-14 sm:py-16">
-    <p class="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-accent">帮助</p>
-    <h1 class="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">帮助</h1>
-    <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-      这里的条目同样是插件项目，不过它们通常是相关的
-      <strong class="text-foreground">文档、资源、软件</strong>等辅助内容——帮助你更深入地
-      了解和使用 DeepSeek Harness 及其生态。
-    </p>
-
-    <div class="mt-8">
+  <PageHeader
+    eyebrow="资源中心"
+    title="帮助与资源"
+    description="查找与 DeepSeek Harness 相关的文档、资源和辅助软件，更顺畅地了解与使用整个生态。"
+  />
+  <div class="shell py-10 sm:py-12">
+    <div>
       <PluginGrid
         plugins={helpPlugins}
         cols={3}

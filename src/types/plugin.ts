@@ -36,8 +36,6 @@ export interface Plugin {
 
   longDescription?: string;
 
-  icon?: string;
-
   author: PluginAuthor;
 
   tags: string[];

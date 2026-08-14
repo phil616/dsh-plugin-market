@@ -33,7 +33,7 @@ export default function SearchBox({
         autoFocus={autoFocus}
         autoComplete="off"
         spellCheck={false}
-        className="h-12 w-full rounded-xl border border-border bg-card pl-10 pr-10 text-sm shadow-sm outline-none transition-colors duration-150 placeholder:text-muted-foreground/70 focus:border-accent/60 focus:ring-2 focus:ring-ring/40"
+        className="h-12 w-full rounded-xl border border-border bg-card pl-10 pr-10 text-sm shadow-sm outline-none transition-[border-color,box-shadow] duration-150 placeholder:text-muted-foreground/75 hover:border-muted-foreground/40 focus:border-accent focus:ring-4 focus:ring-ring/15"
       />
       {value.length > 0 && (
         <button

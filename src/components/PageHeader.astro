@@ -1,0 +1,19 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  description?: string;
+}
+
+const { eyebrow, title, description } = Astro.props;
+---
+
+<header class="border-b border-border bg-surface/35">
+  <div class="shell py-11 sm:py-14">
+    <slot name="before" />
+    <p class="page-eyebrow">{eyebrow}</p>
+    <h1 class="page-title mt-2 max-w-4xl text-balance">{title}</h1>
+    {description && <p class="page-description mt-3 max-w-2xl">{description}</p>}
+    <slot />
+  </div>
+</header>

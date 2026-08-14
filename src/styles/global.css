@@ -24,43 +24,55 @@
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-surface: var(--surface);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
   --color-ring: var(--ring);
+  --color-code: var(--code);
+  --color-code-foreground: var(--code-foreground);
 }
 
 /* ------------------------------------------------------------------ */
-/* Light / Dark palettes (warm neutral + acid-lime signal accent)      */
+/* Light / Dark palettes (quiet neutral + restrained lime accent)      */
 /* ------------------------------------------------------------------ */
 
 :root {
-  --background: oklch(0.981 0.003 110);
-  --foreground: oklch(0.25 0.016 110);
-  --card: oklch(0.997 0.002 110);
-  --card-foreground: oklch(0.25 0.016 110);
-  --muted: oklch(0.953 0.006 110);
-  --muted-foreground: oklch(0.515 0.018 110);
-  --border: oklch(0.902 0.008 110);
-  --accent: oklch(0.495 0.14 130);
-  --accent-soft: oklch(0.93 0.06 125);
-  --ring: oklch(0.62 0.15 130);
+  --background: oklch(0.978 0.004 125);
+  --foreground: oklch(0.215 0.018 125);
+  --card: oklch(0.998 0.002 125);
+  --card-foreground: oklch(0.215 0.018 125);
+  --surface: oklch(0.958 0.008 125);
+  --muted: oklch(0.94 0.008 125);
+  --muted-foreground: oklch(0.46 0.02 125);
+  --border: oklch(0.872 0.012 125);
+  --accent: oklch(0.47 0.135 132);
+  --accent-foreground: oklch(0.99 0.005 125);
+  --accent-soft: oklch(0.925 0.058 130);
+  --ring: oklch(0.59 0.15 132);
+  --code: oklch(0.205 0.018 125);
+  --code-foreground: oklch(0.93 0.008 125);
   color-scheme: light;
 }
 
 .dark {
-  --background: oklch(0.183 0.006 110);
-  --foreground: oklch(0.928 0.005 110);
-  --card: oklch(0.216 0.007 110);
-  --card-foreground: oklch(0.928 0.005 110);
-  --muted: oklch(0.262 0.008 110);
-  --muted-foreground: oklch(0.672 0.012 110);
-  --border: oklch(0.3 0.009 110);
-  --accent: oklch(0.822 0.19 130);
-  --accent-soft: oklch(0.3 0.075 130);
-  --ring: oklch(0.75 0.17 130);
+  --background: oklch(0.155 0.012 125);
+  --foreground: oklch(0.925 0.007 125);
+  --card: oklch(0.195 0.014 125);
+  --card-foreground: oklch(0.925 0.007 125);
+  --surface: oklch(0.225 0.016 125);
+  --muted: oklch(0.25 0.014 125);
+  --muted-foreground: oklch(0.69 0.018 125);
+  --border: oklch(0.305 0.018 125);
+  --accent: oklch(0.76 0.17 132);
+  --accent-foreground: oklch(0.15 0.025 125);
+  --accent-soft: oklch(0.285 0.065 132);
+  --ring: oklch(0.69 0.15 132);
+  --code: oklch(0.12 0.012 125);
+  --code-foreground: oklch(0.88 0.01 125);
   color-scheme: dark;
 }
 
@@ -74,9 +86,23 @@
     background-color: var(--background);
   }
 
+  @media (width >= 64rem) {
+    html {
+      scrollbar-gutter: stable;
+    }
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    min-width: 320px;
     text-rendering: optimizeLegibility;
+  }
+
+  button,
+  input,
+  select,
+  summary {
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
@@ -122,9 +148,43 @@
   }
 }
 
+@utility page-pad {
+  padding-block: 3rem;
+
+  @media (width >= 40rem) {
+    padding-block: 4rem;
+  }
+}
+
+@utility page-eyebrow {
+  @apply font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-accent;
+}
+
+@utility page-title {
+  @apply font-display text-3xl font-bold tracking-[-0.035em] sm:text-4xl;
+}
+
+@utility page-description {
+  @apply text-[15px] leading-7 text-muted-foreground;
+}
+
+@utility surface-card {
+  @apply rounded-2xl border border-border bg-card;
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
+    0 12px 36px color-mix(in oklab, var(--foreground) 3%, transparent);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @utility bg-dots {
-  background-image: radial-gradient(var(--border) 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-image: radial-gradient(color-mix(in oklab, var(--border) 72%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 @utility link-accent {
@@ -145,22 +205,9 @@
 
 /* Subtle radial accent wash behind the hero. */
 .hero-glow {
-  background: radial-gradient(
-    ellipse 65% 55% at 50% 0%,
-    color-mix(in oklab, var(--accent) 9%, transparent),
-    transparent 72%
-  );
-}
-
-/* Auto-generated letter placeholder for plugins without an icon (plan §21).
-   Hue is injected inline as `--hue` by PluginIcon.astro / the React explorer. */
-.placeholder-icon {
-  background: hsl(var(--hue) 55% 88%);
-  color: hsl(var(--hue) 50% 30%);
-}
-.dark .placeholder-icon {
-  background: hsl(var(--hue) 32% 21%);
-  color: hsl(var(--hue) 68% 78%);
+  background:
+    radial-gradient(circle at 20% 15%, color-mix(in oklab, var(--accent) 12%, transparent), transparent 28%),
+    radial-gradient(circle at 80% 35%, color-mix(in oklab, var(--accent) 8%, transparent), transparent 25%);
 }
 
 /* ------------------------------------------------------------------ */
@@ -180,6 +227,12 @@
 
 .rise-in {
   animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (max-width: 639px) {
+  .rise-in {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

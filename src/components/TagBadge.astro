@@ -6,22 +6,26 @@ interface Props {
   active?: boolean;
   small?: boolean;
   href?: string;
+  clickable?: boolean;
 }
 
-const { tag, active = false, small = false } = Astro.props;
+const { tag, active = false, small = false, clickable = true } = Astro.props;
 const href = Astro.props.href ?? `/tags/${encodeURIComponent(tag.toLowerCase())}`;
+const className = `inline-flex items-center rounded-full border font-medium transition-colors duration-150 ${
+  small ? "px-2.5 py-0.5 text-[11px]" : "px-3 py-1 text-xs"
+} ${
+  active
+    ? "border-accent bg-accent text-accent-foreground"
+    : "border-border bg-surface/60 text-muted-foreground hover:border-accent/50 hover:bg-accent-soft/45 hover:text-foreground"
+}`;
 ---
 
-<a
-  href={href}
-  aria-current={active ? "page" : undefined}
-  class={`inline-flex items-center rounded-full border font-medium transition-colors duration-150 ${
-    small ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs"
-  } ${
-    active
-      ? "border-accent bg-accent text-white dark:text-black"
-      : "border-border bg-card text-muted-foreground hover:border-accent/60 hover:text-foreground"
-  }`}
->
-  {tagLabel(tag)}
-</a>
+{
+  clickable ? (
+    <a href={href} aria-current={active ? "page" : undefined} class={className}>
+      {tagLabel(tag)}
+    </a>
+  ) : (
+    <span class={className}>{tagLabel(tag)}</span>
+  )
+}

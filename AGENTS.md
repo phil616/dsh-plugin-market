@@ -35,7 +35,6 @@ npm run check      # 类型检查（astro check）
 | `src/pages/plugins/[slug].astro` | 插件详情页（自动生成，**无需改动**） |
 | `src/pages/help.astro` | 帮助页面：自动列出 `category: "help"` 的条目（文档 / 资源 / 软件） |
 | `src/components/PluginExplorer.tsx` | 首页搜索/筛选/列表（React Island，**无需改动**） |
-| `public/images/plugins/` | 插件图标（SVG，可选） |
 
 > 新增插件**不需要**修改任何页面或组件：详情页、标签页、帮助页（`category: "help"`
 > 的条目）、搜索索引均由 `src/data/plugins/` 自动生成。
@@ -54,7 +53,6 @@ export const myPlugin: Plugin = {
   name: "我的插件",             // 显示名称（中文）
   description: "一句话简介（显示在卡片上）",
   longDescription: "详细介绍（显示在详情页）",
-  icon: "/images/plugins/my-plugin.svg", // 可选；不填则自动生成字母占位图标
   author: { name: "作者名", url: "https://github.com/xxx" },
   tags: ["Tool", "Developer"],  // 英文值，见第 5 节"标签映射"
   category: "tool",             // "tool"（默认，智能体工具）或 "help"（文档 / 资源 / 软件，收录到 /help）
@@ -99,13 +97,7 @@ export const plugins: Plugin[] = [ /* 已有插件 */, myPlugin ];
 Security: "安全",
 ```
 
-### 步骤 4：图标（可选）
-
-如需图标：放入 `public/images/plugins/<slug>.svg`（推荐 128×128，深色圆角底
-+ 统一描边风格，与站点视觉一致），并在数据中填写 `icon`。
-不填图标不会报错——详情页与卡片会自动生成字母占位图。
-
-### 步骤 5：验证
+### 步骤 4：验证
 
 ```bash
 npm run check   # 必须 0 errors
@@ -126,7 +118,7 @@ npm run dev     # 抽查：首页能搜到、详情页可打开、安装命令�
 9. **外链**：保持 `target="_blank" rel="noopener noreferrer"`（组件已内置，不要覆盖）。
 10. **示例标记**：mock 数据保留 `example: true`（界面显示"示例"徽章）；真实插件移除该字段。
 11. **文件编码**：UTF-8；中文标点使用全角（复制英文模板时常见遗漏）。
-12. **改动范围**：只修改与本次插件相关的文件（新数据文件、`index.ts`、`TAG_LABELS`、图标）；不要提交 `dist/`、`node_modules/` 或无关的格式化改动。
+12. **改动范围**：只修改与本次插件相关的文件（新数据文件、`index.ts`、`TAG_LABELS`）；不要提交 `dist/`、`node_modules/` 或无关的格式化改动。
 
 ## 6. PR 提交前自检清单
 
@@ -136,6 +128,5 @@ npm run dev     # 抽查：首页能搜到、详情页可打开、安装命令�
 - [ ] 详情页正常：介绍 / 标签 / 作者 / 仓库链接 / 安装命令
 - [ ] 安装命令的 `--profile` 输入可实时替换，复制按钮可用
 - [ ] 新标签已加入 `TAG_LABELS`，界面显示中文
-- [ ] 图标（如有）在浅色与深色主题下均可读
 - [ ] 未引入后端、数据库、分发相关代码或字段
 - [ ] Commit message 简洁说明本次改动（如 `feat: add my-plugin listing`）

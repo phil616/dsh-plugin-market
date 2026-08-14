@@ -8,12 +8,14 @@ const links = [
   { href: "/tags", label: "标签" },
   { href: "/about", label: "关于" },
 ];
+
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
 ---
 
-<header class="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
+<header class="sticky top-0 z-40 border-b border-border/80 bg-background/90 shadow-[0_1px_0_color-mix(in_oklab,var(--foreground)_2%,transparent)] backdrop-blur-xl">
   <div class="shell flex h-16 items-center justify-between gap-4">
-    <a href="/" class="group flex items-center gap-2.5" aria-label="DeepSeek Harness插件市场 — 首页">
-      <img src="/logo.svg" alt="" width="28" height="28" class="shrink-0" />
+    <a href="/" class="group flex items-center" aria-label="DeepSeek Harness插件市场 — 首页">
       <span class="font-display text-[17px] font-semibold tracking-tight">
         DSH<span class="text-accent">插件市场</span>
       </span>
@@ -24,7 +26,12 @@ const links = [
       {links.map((l) => (
         <a
           href={l.href}
-          class="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
+          aria-current={isActive(l.href) ? "page" : undefined}
+          class={`rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ${
+            isActive(l.href)
+              ? "bg-accent-soft text-accent"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          }`}
         >
           {l.label}
         </a>
@@ -36,10 +43,10 @@ const links = [
         href="https://code.altasci.com/phil616/deepseek-harness-market"
         target="_blank"
         rel="noopener noreferrer"
-        class="hidden items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent hover:text-foreground sm:inline-flex"
+        class="hidden items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-colors duration-150 hover:border-accent/50 hover:text-foreground sm:inline-flex"
       >
         <ExternalLink className="h-4 w-4" aria-hidden="true" />
-        GitHub
+        源码
       </a>
 
       <ThemeToggle client:load />
@@ -47,17 +54,22 @@ const links = [
       <!-- 移动端导航（无需 JS 的折叠菜单） -->
       <details class="group relative md:hidden">
         <summary
-          class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground [&::-webkit-details-marker]:hidden"
+          class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-border bg-card text-muted-foreground shadow-sm transition-colors duration-150 hover:bg-muted hover:text-foreground [&::-webkit-details-marker]:hidden"
           aria-label="打开菜单"
         >
           <Menu className="h-5 w-5 group-open:hidden" aria-hidden="true" />
           <X className="hidden h-5 w-5 group-open:block" aria-hidden="true" />
         </summary>
-        <div class="absolute right-0 top-12 w-48 rounded-xl border border-border bg-card p-2 shadow-lg shadow-black/5">
+        <div class="surface-card absolute right-0 top-12 w-52 p-2 shadow-xl">
           {links.map((l) => (
             <a
               href={l.href}
-              class="block rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
+              aria-current={isActive(l.href) ? "page" : undefined}
+              class={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150 ${
+                isActive(l.href)
+                  ? "bg-accent-soft text-accent"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               {l.label}
             </a>
@@ -68,7 +80,7 @@ const links = [
             rel="noopener noreferrer"
             class="mt-1 block rounded-lg border-t border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
           >
-            GitHub ↗
+            查看源码 ↗
           </a>
         </div>
       </details>

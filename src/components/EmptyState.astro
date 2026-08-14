@@ -9,8 +9,10 @@ interface Props {
 const { title = "未找到插件。", message = "换个关键词试试，或清除一些筛选条件。" } = Astro.props;
 ---
 
-<div class="rounded-xl border border-dashed border-border bg-card/60 px-6 py-16 text-center">
-  <SearchX className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden="true" />
+<div class="surface-card border-dashed px-6 py-16 text-center">
+  <span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-soft text-accent">
+    <SearchX className="h-5 w-5" aria-hidden="true" />
+  </span>
   <h3 class="mt-4 font-display text-base font-semibold">{title}</h3>
-  <p class="mt-1 text-sm text-muted-foreground">{message}</p>
+  <p class="mx-auto mt-2 max-w-lg text-sm leading-6 text-muted-foreground">{message}</p>
 </div>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import PluginGrid from "@/components/PluginGrid.astro";
 import { plugins } from "@/data/plugins";
 import { getAllTags, getPluginsByTag, sortPlugins, tagLabel } from "@/utils/plugin";
@@ -28,21 +29,21 @@ const canonical = new URL(`/tags/${encodeURIComponent(tag.toLowerCase())}/`, sit
   description={`${tagPlugins.length} 个 Harness 插件标记为“${tagLabel(tag)}”。查看它们的介绍、标签、安装命令与仓库链接。`}
   canonical={canonical}
 >
-  <div class="shell py-14 sm:py-16">
+  <PageHeader
+    eyebrow="标签"
+    title={tagLabel(tag)}
+    description={`共有 ${tagPlugins.length} 个插件标记为“${tagLabel(tag)}”。`}
+  >
     <a
-      href="/plugins"
-      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground"
+      slot="before"
+      href="/tags"
+      class="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-accent"
     >
-      ← 全部插件
+      ← 返回全部标签
     </a>
-
-    <p class="mt-8 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-accent">标签</p>
-    <h1 class="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">{tagLabel(tag)}</h1>
-    <p class="mt-2 text-sm text-muted-foreground">
-      共有 {tagPlugins.length} 个插件标记为“{tagLabel(tag)}”。
-    </p>
-
-    <div class="mt-8">
+  </PageHeader>
+  <div class="shell py-10 sm:py-12">
+    <div>
       <PluginGrid plugins={tagPlugins} cols={3} />
     </div>
   </div>

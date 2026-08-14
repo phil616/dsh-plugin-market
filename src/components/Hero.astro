@@ -7,35 +7,35 @@ interface Props {
 const { pluginCount, tagCount } = Astro.props;
 ---
 
-<section class="bg-dots relative overflow-hidden border-b border-border">
+<section class="bg-dots relative overflow-hidden border-b border-border bg-surface/35">
   <div class="hero-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
-  <div class="shell relative pb-14 pt-20 text-center sm:pb-16 sm:pt-24">
-    <p class="rise-in font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-accent">
-      <span class="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-accent align-middle" aria-hidden="true"></span>
+  <div class="shell relative py-16 text-center sm:py-20 lg:py-24">
+    <p class="rise-in page-eyebrow">
+      <span class="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-accent align-middle shadow-[0_0_0_4px_var(--accent-soft)]" aria-hidden="true"></span>
       官方插件目录
     </p>
 
     <h1
-      class="rise-in mx-auto mt-5 max-w-3xl font-display text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl"
+      class="rise-in mx-auto mt-5 max-w-4xl font-display text-4xl font-bold tracking-[-0.055em] text-balance sm:text-5xl lg:text-6xl"
       style="animation-delay: 60ms"
     >
       发现 <span class="text-accent">Harness</span> 插件
     </h1>
 
     <p
-      class="rise-in mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg"
+      class="rise-in mx-auto mt-5 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg"
       style="animation-delay: 120ms"
     >
       探索为 Harness 智能体打造的工具、集成与扩展。
     </p>
 
     <div
-      class="rise-in mt-8 flex flex-wrap items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-wider text-muted-foreground"
+      class="rise-in mt-8 flex flex-wrap items-center justify-center gap-2 font-mono text-[11px] tracking-wide text-muted-foreground"
       style="animation-delay: 180ms"
     >
-      <span class="rounded-full border border-border bg-card px-3 py-1.5">{pluginCount} 个插件</span>
-      <span class="rounded-full border border-border bg-card px-3 py-1.5">{tagCount} 个标签</span>
-      <span class="rounded-full border border-border bg-card px-3 py-1.5">0 后端</span>
+      <span class="rounded-full border border-border bg-card/90 px-3 py-1.5 shadow-sm">{pluginCount} 个插件</span>
+      <span class="rounded-full border border-border bg-card/90 px-3 py-1.5 shadow-sm">{tagCount} 个标签</span>
+      <span class="rounded-full border border-border bg-card/90 px-3 py-1.5 shadow-sm">纯静态</span>
     </div>
   </div>
 </section>

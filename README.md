@@ -49,11 +49,11 @@ Nginx、Cloudflare Pages、GitHub Pages 或任意静态 Web Server，无需任�
 ## 目录结构
 
 ```text
-public/                  # favicon、logo、robots.txt、插件图标
+public/                  # favicon、robots.txt
 src/
 ├── components/          # Astro 静态组件 + React Islands
 │   ├── Header.astro / Footer.astro / Hero.astro
-│   ├── PluginCard.astro / PluginGrid.astro / PluginIcon.astro / TagBadge.astro / EmptyState.astro
+│   ├── PluginCard.astro / PluginGrid.astro / TagBadge.astro / EmptyState.astro
 │   ├── ThemeToggle.tsx / SearchBox.tsx / PluginFilter.tsx
 │   ├── PluginExplorer.tsx   # 首页搜索 + 筛选 + 列表（唯一的大 Island）
 │   └── InstallBox.tsx       # 详情页安装命令（profile 替换 + 复制）
@@ -89,7 +89,6 @@ export const myPlugin: Plugin = {
   name: "我的插件",             // 显示名称
   description: "一句话简介（显示在卡片上）",
   longDescription: "详细介绍（显示在详情页）",
-  icon: "/images/plugins/my-plugin.svg", // 可选；不填则自动生成字母占位图标
   author: { name: "作者名", url: "https://github.com/xxx" },
   tags: ["Tool", "Developer"],  // 英文值；界面显示中文，见下方"标签映射"
   category: "tool",             // "tool"（默认，智能体工具）或 "help"（文档 / 资源 / 软件，收录到 /help）

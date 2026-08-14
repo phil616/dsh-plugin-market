@@ -1,50 +1,14 @@
-import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { ArrowUpRight, Layers, SearchX, Sparkles } from "lucide-react";
 import type { Plugin } from "@/types/plugin";
 import { filterPlugins } from "@/utils/search";
-import { placeholderHue, sortPlugins, tagLabel, type SortMode } from "@/utils/plugin";
+import { sortPlugins, tagLabel, type SortMode } from "@/utils/plugin";
 import SearchBox from "./SearchBox";
 import PluginFilter from "./PluginFilter";
 
 interface Props {
   plugins: Plugin[];
   tags: string[];
-}
-
-/* ------------------------------------------------------------------ */
-/* Card + icon (mirror of PluginCard.astro / PluginIcon.astro)         */
-/* ------------------------------------------------------------------ */
-
-function PluginIconView({ plugin, size }: { plugin: Plugin; size: number }) {
-  if (plugin.icon) {
-    return (
-      <img
-        src={plugin.icon}
-        alt=""
-        width={size}
-        height={size}
-        loading="lazy"
-        className="shrink-0 rounded-lg object-cover"
-      />
-    );
-  }
-  const hue = placeholderHue(plugin.slug);
-  return (
-    <span
-      aria-hidden="true"
-      className="placeholder-icon flex shrink-0 select-none items-center justify-center rounded-lg font-display font-semibold"
-      style={
-        {
-          width: `${size}px`,
-          height: `${size}px`,
-          fontSize: `${Math.round(size * 0.44)}px`,
-          "--hue": `${hue}`,
-        } as CSSProperties
-      }
-    >
-      {plugin.name.trim()[0]?.toUpperCase() ?? "?"}
-    </span>
-  );
 }
 
 function PluginCardView({ plugin }: { plugin: Plugin }) {
@@ -54,13 +18,15 @@ function PluginCardView({ plugin }: { plugin: Plugin }) {
   return (
     <a
       href={`/plugins/${plugin.slug}`}
-      className="group relative flex h-full flex-col rounded-xl border border-border bg-card p-5 transition-all duration-150 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md hover:shadow-black/[0.05]"
+      className="group surface-card relative flex h-full min-h-56 flex-col overflow-hidden p-5 transition-[transform,border-color,box-shadow] duration-200 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:origin-left before:scale-x-0 before:bg-accent before:transition-transform before:duration-200 hover:-translate-y-1 hover:border-accent/45 hover:shadow-lg hover:shadow-black/[0.06] hover:before:scale-x-100"
     >
       <div className="flex items-start justify-between gap-3">
-        <PluginIconView plugin={plugin} size={44} />
+        <h3 className="font-display text-lg font-semibold tracking-[-0.02em] transition-colors group-hover:text-accent">
+          {plugin.name}
+        </h3>
         <div className="flex flex-wrap justify-end gap-1.5">
           {plugin.example && (
-            <span className="rounded border border-accent/40 bg-accent-soft/70 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-accent">
+            <span className="rounded-md border border-accent/35 bg-accent-soft/70 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-accent">
               示例
             </span>
           )}
@@ -72,9 +38,7 @@ function PluginCardView({ plugin }: { plugin: Plugin }) {
         </div>
       </div>
 
-      <h3 className="mt-4 font-display text-base font-semibold tracking-tight">{plugin.name}</h3>
-
-      <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+      <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">
         {plugin.description}
       </p>
 
@@ -83,7 +47,7 @@ function PluginCardView({ plugin }: { plugin: Plugin }) {
           {visibleTags.map((t) => (
             <span
               key={t}
-              className="rounded-full border border-border bg-card px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+              className="rounded-full border border-border bg-surface/60 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground"
             >
               {tagLabel(t)}
             </span>
@@ -93,7 +57,7 @@ function PluginCardView({ plugin }: { plugin: Plugin }) {
           )}
         </div>
 
-        <div className="mt-3.5 flex items-center justify-between gap-2 border-t border-border pt-3.5">
+        <div className="mt-4 flex items-center justify-between gap-2 border-t border-border pt-4">
           <p className="min-w-0 truncate text-xs text-muted-foreground">
             作者 <span className="font-medium text-foreground">{plugin.author.name}</span>
           </p>
@@ -113,10 +77,12 @@ function PluginCardView({ plugin }: { plugin: Plugin }) {
 
 function SectionHeading({ icon, title, count }: { icon: ReactNode; title: string; count: number }) {
   return (
-    <div className="flex items-center gap-2">
-      {icon}
-      <h2 className="font-display text-lg font-semibold tracking-tight">{title}</h2>
-      <span className="rounded-full bg-muted px-2 py-0.5 font-mono text-xs text-muted-foreground">
+    <div className="flex items-center gap-2.5">
+      <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent-soft text-accent">
+        {icon}
+      </span>
+      <h2 className="font-display text-xl font-semibold tracking-[-0.025em]">{title}</h2>
+      <span className="rounded-full border border-border bg-card px-2 py-0.5 font-mono text-[11px] text-muted-foreground">
         {count}
       </span>
     </div>
@@ -142,17 +108,19 @@ export default function PluginExplorer({ plugins, tags }: Props) {
   };
 
   return (
-    <section className="shell pb-20 pt-8 sm:pb-24" aria-label="浏览插件">
+    <section className="shell pb-20 sm:pb-24" aria-label="浏览插件">
       {/* 搜索框 — 与 Hero 视觉衔接 */}
-      <div className="mx-auto max-w-2xl">
-        <SearchBox value={query} onChange={setQuery} autoFocus />
-        <p className="mt-2 text-center font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+      <div className="relative z-10 mx-auto -mt-7 max-w-3xl">
+        <div className="surface-card p-2 sm:p-3">
+          <SearchBox value={query} onChange={setQuery} />
+        </div>
+        <p className="mt-2.5 text-center text-xs text-muted-foreground">
           按名称、描述、标签或作者搜索
         </p>
       </div>
 
       {isFiltering ? (
-        <div className="mt-12">
+        <div className="mt-10 sm:mt-12">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
@@ -165,14 +133,14 @@ export default function PluginExplorer({ plugins, tags }: Props) {
             <button
               type="button"
               onClick={clearAll}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors duration-150 hover:border-accent/60 hover:text-foreground"
+              className="rounded-xl border border-border bg-card px-3.5 py-2 text-xs font-semibold text-muted-foreground shadow-sm transition-colors duration-150 hover:border-accent/50 hover:bg-accent-soft/40 hover:text-foreground"
             >
               清除筛选
             </button>
           </div>
 
           {visible.length > 0 ? (
-            <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {visible.map((p) => (
                 <li key={p.slug} className="min-w-0">
                   <PluginCardView plugin={p} />
@@ -180,8 +148,10 @@ export default function PluginExplorer({ plugins, tags }: Props) {
               ))}
             </ul>
           ) : (
-            <div className="rounded-xl border border-dashed border-border bg-card/60 px-6 py-16 text-center">
-              <SearchX className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden="true" />
+            <div className="surface-card border-dashed px-6 py-16 text-center">
+              <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-soft text-accent">
+                <SearchX className="h-5 w-5" aria-hidden="true" />
+              </span>
               <h3 className="mt-4 font-display text-base font-semibold">未找到插件。</h3>
               <p className="mt-1 text-sm text-muted-foreground">
                 换个关键词试试，或清除一些筛选条件。
@@ -189,7 +159,7 @@ export default function PluginExplorer({ plugins, tags }: Props) {
               <button
                 type="button"
                 onClick={clearAll}
-                className="mt-5 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors duration-150 hover:border-accent/60"
+                className="mt-5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground transition-opacity duration-150 hover:opacity-90"
               >
                 重置筛选
               </button>
@@ -199,13 +169,13 @@ export default function PluginExplorer({ plugins, tags }: Props) {
       ) : (
         <>
           {featured.length > 0 && (
-            <div className="mt-14">
+            <div className="mt-10 sm:mt-12">
               <SectionHeading
                 icon={<Sparkles className="h-4 w-4 text-accent" aria-hidden="true" />}
                 title="精选插件"
                 count={featured.length}
               />
-              <ul className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                 {featured.map((p) => (
                   <li key={p.slug} className="min-w-0">
                     <PluginCardView plugin={p} />
@@ -215,13 +185,13 @@ export default function PluginExplorer({ plugins, tags }: Props) {
             </div>
           )}
 
-          <div className="mt-14">
+          <div className="mt-12 sm:mt-14">
             <SectionHeading
               icon={<Layers className="h-4 w-4 text-accent" aria-hidden="true" />}
               title="全部插件"
               count={plugins.length}
             />
-            <div className="mt-5">
+            <div className="surface-card mt-5 p-3 sm:p-4">
               <PluginFilter
                 tags={tags}
                 activeTag={tag}
@@ -230,7 +200,7 @@ export default function PluginExplorer({ plugins, tags }: Props) {
                 onSortChange={setSort}
               />
             </div>
-            <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
               {visible.map((p) => (
                 <li key={p.slug} className="min-w-0">
                   <PluginCardView plugin={p} />
