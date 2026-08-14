@@ -1,0 +1,24 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import type { Plugin } from "@/types/plugin";
+
+interface Props {
+  plugin: Plugin;
+}
+
+const { plugin } = Astro.props;
+
+const description = `${plugin.description} 查看 ${plugin.name} 插件的安装命令、标签、许可证与仓库链接。`;
+
+const site = Astro.site ?? new URL("https://harness-plugins.example.com");
+const canonical = new URL(`/plugins/${plugin.slug}/`, site).href;
+---
+
+<BaseLayout
+  title={`${plugin.name} — DeepSeek Harness插件市场`}
+  description={description}
+  canonical={canonical}
+  ogType="article"
+>
+  <slot />
+</BaseLayout>

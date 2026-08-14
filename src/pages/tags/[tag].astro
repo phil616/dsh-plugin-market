@@ -1,0 +1,49 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PluginGrid from "@/components/PluginGrid.astro";
+import { plugins } from "@/data/plugins";
+import { getAllTags, getPluginsByTag, sortPlugins, tagLabel } from "@/utils/plugin";
+
+export function getStaticPaths() {
+  return getAllTags(plugins).map((tag) => ({
+    params: { tag: tag.toLowerCase() },
+    props: { tag },
+  }));
+}
+
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+
+const tagPlugins = sortPlugins(getPluginsByTag(plugins, tag), "featured");
+
+const site = Astro.site ?? new URL("https://harness-plugins.example.com");
+const canonical = new URL(`/tags/${encodeURIComponent(tag.toLowerCase())}/`, site).href;
+---
+
+<BaseLayout
+  title={`${tagLabel(tag)}插件 — DeepSeek Harness插件市场`}
+  description={`${tagPlugins.length} 个 Harness 插件标记为“${tagLabel(tag)}”。查看它们的介绍、标签、安装命令与仓库链接。`}
+  canonical={canonical}
+>
+  <div class="shell py-14 sm:py-16">
+    <a
+      href="/plugins"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground"
+    >
+      ← 全部插件
+    </a>
+
+    <p class="mt-8 font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-accent">标签</p>
+    <h1 class="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">{tagLabel(tag)}</h1>
+    <p class="mt-2 text-sm text-muted-foreground">
+      共有 {tagPlugins.length} 个插件标记为“{tagLabel(tag)}”。
+    </p>
+
+    <div class="mt-8">
+      <PluginGrid plugins={tagPlugins} cols={3} />
+    </div>
+  </div>
+</BaseLayout>

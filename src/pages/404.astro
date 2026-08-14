@@ -1,0 +1,33 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="404 — 页面未找到"
+  description="您访问的页面不存在。"
+  noindex
+>
+  <div class="shell py-24 text-center sm:py-32">
+    <p class="font-mono text-sm font-medium uppercase tracking-[0.3em] text-accent">404</p>
+    <h1 class="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+      未找到插件。
+    </h1>
+    <p class="mx-auto mt-3 max-w-md text-muted-foreground">
+      您访问的页面不存在，或该插件已从目录中移除。
+    </p>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/plugins"
+        class="inline-flex items-center rounded-lg bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent hover:text-white dark:hover:text-black"
+      >
+        返回插件列表
+      </a>
+      <a
+        href="/"
+        class="inline-flex items-center rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent/60 hover:text-foreground"
+      >
+        首页
+      </a>
+    </div>
+  </div>
+</BaseLayout>

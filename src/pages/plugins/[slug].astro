@@ -1,0 +1,193 @@
+---
+import PluginLayout from "@/layouts/PluginLayout.astro";
+import PluginIcon from "@/components/PluginIcon.astro";
+import TagBadge from "@/components/TagBadge.astro";
+import InstallPanel from "@/components/InstallBox";
+import { plugins } from "@/data/plugins";
+import type { Plugin } from "@/types/plugin";
+import {
+  ArrowLeft,
+  BookOpen,
+  ExternalLink,
+  FolderGit2,
+  Globe,
+  Link2,
+  ShieldAlert,
+  Terminal,
+  User,
+} from "lucide-react";
+
+export function getStaticPaths() {
+  return plugins.map((plugin) => ({
+    params: { slug: plugin.slug },
+    props: { plugin },
+  }));
+}
+
+interface Props {
+  plugin: Plugin;
+}
+
+const { plugin } = Astro.props;
+
+const deprecated = plugin.deprecated ?? false;
+
+const externalLinks = [
+  { name: "仓库", href: plugin.repository, icon: FolderGit2 },
+  { name: "主页", href: plugin.homepage, icon: Globe, show: Boolean(plugin.homepage) },
+  { name: "文档", href: plugin.documentation, icon: BookOpen, show: Boolean(plugin.documentation) },
+].filter((l) => l.show !== false);
+
+const linkRows = [
+  { name: "仓库", href: plugin.repository, icon: FolderGit2 },
+  ...(plugin.homepage ? [{ name: "主页", href: plugin.homepage, icon: Globe }] : []),
+  ...(plugin.documentation ? [{ name: "文档", href: plugin.documentation, icon: BookOpen }] : []),
+  ...(plugin.author.url ? [{ name: `作者 — ${plugin.author.name}`, href: plugin.author.url, icon: User }] : []),
+  ...(plugin.links ?? []).map((l) => ({ name: l.name, href: l.url, icon: Link2 })),
+];
+---
+
+<PluginLayout plugin={plugin}>
+  <div class="shell py-10 sm:py-14">
+    <a
+      href="/plugins"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:text-foreground"
+    >
+      <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+      全部插件
+    </a>
+
+    <!-- Header card -->
+    <div class="mt-6 rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        <div class="flex items-start gap-4 sm:gap-5">
+          <PluginIcon plugin={plugin} size={64} class="rounded-xl" />
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="font-display text-2xl font-bold tracking-tight sm:text-3xl">{plugin.name}</h1>
+              {plugin.example && (
+                <span class="rounded border border-accent/40 bg-accent-soft/70 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-accent">
+                  示例
+                </span>
+              )}
+              {deprecated && (
+                <span class="rounded border border-red-400/50 bg-red-500/10 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-red-500 dark:text-red-400">
+                  已弃用
+                </span>
+              )}
+            </div>
+            <p class="mt-2 max-w-xl leading-relaxed text-muted-foreground">{plugin.description}</p>
+            <div class="mt-4 flex flex-wrap items-center gap-1.5">
+              {plugin.tags.map((t) => (
+                <TagBadge tag={t} />
+              ))}
+            </div>
+            <p class="mt-4 text-sm text-muted-foreground">
+              作者{" "}
+              <a
+                href={plugin.author.url ?? plugin.repository}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-accent font-medium"
+              >
+                {plugin.author.name}
+              </a>
+              {plugin.license && (
+                <>
+                  {" · "}
+                  <span class="font-mono text-xs">{plugin.license}</span>
+                </>
+              )}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 lg:shrink-0">
+          {externalLinks.map((l) => {
+            const Icon = l.icon;
+            return (
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={
+                  l.name === "仓库"
+                    ? "inline-flex items-center gap-2 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors duration-150 hover:bg-accent hover:text-white dark:hover:text-black"
+                    : "inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent/60 hover:text-foreground"
+                }
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+                {l.name}
+                <ExternalLink className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+
+    {
+      deprecated && (
+        <div class="mt-6 flex items-start gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-300">
+          <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+          <p>
+            该插件已不再积极维护。它保留在目录中供参考——请到仓库中查看 fork
+            或替代方案。
+          </p>
+        </div>
+      )
+    }
+
+    <!-- 插件介绍 -->
+    <section class="mt-10 sm:mt-12">
+      <h2 class="font-display text-lg font-semibold tracking-tight">插件介绍</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted-foreground">
+        {plugin.longDescription ?? plugin.description}
+      </p>
+    </section>
+
+    <!-- 安装 -->
+    <section class="mt-10 sm:mt-12">
+      <h2 class="flex items-center gap-2 font-display text-lg font-semibold tracking-tight">
+        <Terminal className="h-4 w-4 text-accent" aria-hidden="true" />
+        安装
+      </h2>
+      <p class="mt-2 max-w-3xl text-sm text-muted-foreground">
+        请在您自己的终端中执行这些命令——本站只负责展示与复制，绝不代您执行任何命令。
+      </p>
+      <div class="mt-5 max-w-3xl">
+        <InstallPanel client:load methods={plugin.installMethods} />
+      </div>
+    </section>
+
+    <!-- 相关链接 -->
+    <section class="mt-10 sm:mt-12">
+      <h2 class="font-display text-lg font-semibold tracking-tight">相关链接</h2>
+      <ul class="mt-3 max-w-3xl divide-y divide-border rounded-xl border border-border bg-card">
+        {linkRows.map((l) => {
+          const Icon = l.icon;
+          return (
+            <li>
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex items-center gap-3 px-4 py-3.5 transition-colors duration-150 hover:bg-muted/50"
+              >
+                <Icon className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                <span class="text-sm font-medium">{l.name}</span>
+                <span class="ml-auto min-w-0 flex-1 truncate text-right font-mono text-xs text-muted-foreground sm:max-w-md">
+                  {l.href.replace(/^https?:\/\//, "")}
+                </span>
+                <ExternalLink
+                  className="h-4 w-4 shrink-0 text-muted-foreground transition-colors duration-150 group-hover:text-accent"
+                  aria-hidden="true"
+                />
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  </div>
+</PluginLayout>

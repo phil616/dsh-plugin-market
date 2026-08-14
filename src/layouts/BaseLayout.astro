@@ -1,0 +1,81 @@
+---
+import "@fontsource-variable/sora";
+import "@fontsource-variable/instrument-sans";
+import "@fontsource-variable/jetbrains-mono";
+import "../styles/global.css";
+
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute canonical URL; defaults to Astro.site + current path. */
+  canonical?: string;
+  noindex?: boolean;
+  ogType?: "website" | "article";
+}
+
+const { title, description, canonical, noindex = false, ogType = "website" } = Astro.props;
+
+const site = Astro.site ?? new URL("https://harness-plugins.example.com");
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, site).href;
+const ogTitle = title.includes("Harness") ? title : `${title} · DeepSeek Harness插件市场`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="DeepSeek Harness插件市场" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- 首屏渲染前应用已保存/系统的主题，避免闪烁。 -->
+    <script is:inline>
+      (function () {
+        var theme = "system";
+        try {
+          theme = localStorage.getItem("theme") || "system";
+        } catch (e) {
+          /* storage unavailable — fall back to system */
+        }
+        var dark =
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        var root = document.documentElement;
+        root.classList.toggle("dark", dark);
+        root.style.colorScheme = dark ? "dark" : "light";
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
+    >
+      跳到主要内容
+    </a>
+    <Header />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

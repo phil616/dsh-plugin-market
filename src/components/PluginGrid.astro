@@ -1,0 +1,35 @@
+---
+import type { Plugin } from "@/types/plugin";
+import PluginCard from "./PluginCard.astro";
+import EmptyState from "./EmptyState.astro";
+
+interface Props {
+  plugins: Plugin[];
+  /** Column layout: 2 (tablet), 3 (desktop) or 4 (wide desktop). */
+  cols?: 2 | 3 | 4;
+  emptyTitle?: string;
+  emptyMessage?: string;
+}
+
+const { plugins, cols = 3, emptyTitle, emptyMessage } = Astro.props;
+
+const gridClass = {
+  2: "sm:grid-cols-2",
+  3: "sm:grid-cols-2 lg:grid-cols-3",
+  4: "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+}[cols];
+---
+
+{
+  plugins.length > 0 ? (
+    <ul class={`grid grid-cols-1 gap-5 ${gridClass}`}>
+      {plugins.map((p) => (
+        <li class="min-w-0">
+          <PluginCard plugin={p} />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <EmptyState title={emptyTitle} message={emptyMessage} />
+  )
+}

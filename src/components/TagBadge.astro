@@ -1,0 +1,27 @@
+---
+import { tagLabel } from "@/utils/plugin";
+
+interface Props {
+  tag: string;
+  active?: boolean;
+  small?: boolean;
+  href?: string;
+}
+
+const { tag, active = false, small = false } = Astro.props;
+const href = Astro.props.href ?? `/tags/${encodeURIComponent(tag.toLowerCase())}`;
+---
+
+<a
+  href={href}
+  aria-current={active ? "page" : undefined}
+  class={`inline-flex items-center rounded-full border font-medium transition-colors duration-150 ${
+    small ? "px-2 py-0.5 text-[11px]" : "px-2.5 py-1 text-xs"
+  } ${
+    active
+      ? "border-accent bg-accent text-white dark:text-black"
+      : "border-border bg-card text-muted-foreground hover:border-accent/60 hover:text-foreground"
+  }`}
+>
+  {tagLabel(tag)}
+</a>

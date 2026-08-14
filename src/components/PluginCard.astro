@@ -1,0 +1,64 @@
+---
+import type { Plugin } from "@/types/plugin";
+import PluginIcon from "./PluginIcon.astro";
+import TagBadge from "./TagBadge.astro";
+import { ArrowUpRight } from "lucide-react";
+
+interface Props {
+  plugin: Plugin;
+}
+
+const { plugin } = Astro.props;
+const visibleTags = plugin.tags.slice(0, 3);
+const hiddenTagCount = plugin.tags.length - visibleTags.length;
+---
+
+<a
+  href={`/plugins/${plugin.slug}`}
+  class="group relative flex h-full flex-col rounded-xl border border-border bg-card p-5 transition-all duration-150 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-md hover:shadow-black/[0.05]"
+>
+  <div class="flex items-start justify-between gap-3">
+    <PluginIcon plugin={plugin} size={44} />
+    <div class="flex flex-wrap justify-end gap-1.5">
+      {plugin.example && (
+        <span class="rounded border border-accent/40 bg-accent-soft/70 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-accent">
+          示例
+        </span>
+      )}
+      {plugin.deprecated && (
+        <span class="rounded border border-red-400/50 bg-red-500/10 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-red-500 dark:text-red-400">
+          已弃用
+        </span>
+      )}
+    </div>
+  </div>
+
+  <h3 class="mt-4 font-display text-base font-semibold tracking-tight">
+    {plugin.name}
+  </h3>
+
+  <p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+    {plugin.description}
+  </p>
+
+  <div class="mt-auto pt-5">
+    <div class="flex flex-wrap items-center gap-1.5">
+      {visibleTags.map((t) => (
+        <TagBadge tag={t} small />
+      ))}
+      {hiddenTagCount > 0 && (
+        <span class="font-mono text-[11px] text-muted-foreground">+{hiddenTagCount}</span>
+      )}
+    </div>
+
+    <div class="mt-3.5 flex items-center justify-between gap-2 border-t border-border pt-3.5">
+      <p class="min-w-0 truncate text-xs text-muted-foreground">
+        作者 <span class="font-medium text-foreground">{plugin.author.name}</span>
+      </p>
+      <ArrowUpRight
+        className="h-4 w-4 shrink-0 text-muted-foreground transition-all duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent"
+        aria-hidden="true"
+      />
+    </div>
+  </div>
+</a>

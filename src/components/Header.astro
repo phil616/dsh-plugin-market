@@ -1,0 +1,77 @@
+---
+import { Menu, X, ExternalLink } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle.tsx";
+
+const links = [
+  { href: "/plugins", label: "插件" },
+  { href: "/help", label: "帮助" },
+  { href: "/tags", label: "标签" },
+  { href: "/about", label: "关于" },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
+  <div class="shell flex h-16 items-center justify-between gap-4">
+    <a href="/" class="group flex items-center gap-2.5" aria-label="DeepSeek Harness插件市场 — 首页">
+      <img src="/logo.svg" alt="" width="28" height="28" class="shrink-0" />
+      <span class="font-display text-[17px] font-semibold tracking-tight">
+        DSH<span class="text-accent">插件市场</span>
+      </span>
+    </a>
+
+    <!-- 桌面端导航 -->
+    <nav class="hidden items-center gap-1 md:flex" aria-label="主导航">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href="https://code.altasci.com/phil616/deepseek-harness-market"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:border-accent hover:text-foreground sm:inline-flex"
+      >
+        <ExternalLink className="h-4 w-4" aria-hidden="true" />
+        GitHub
+      </a>
+
+      <ThemeToggle client:load />
+
+      <!-- 移动端导航（无需 JS 的折叠菜单） -->
+      <details class="group relative md:hidden">
+        <summary
+          class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground [&::-webkit-details-marker]:hidden"
+          aria-label="打开菜单"
+        >
+          <Menu className="h-5 w-5 group-open:hidden" aria-hidden="true" />
+          <X className="hidden h-5 w-5 group-open:block" aria-hidden="true" />
+        </summary>
+        <div class="absolute right-0 top-12 w-48 rounded-xl border border-border bg-card p-2 shadow-lg shadow-black/5">
+          {links.map((l) => (
+            <a
+              href={l.href}
+              class="block rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
+            >
+              {l.label}
+            </a>
+          ))}
+          <a
+            href="https://code.altasci.com/phil616/deepseek-harness-market"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-1 block rounded-lg border-t border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
+          >
+            GitHub ↗
+          </a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>

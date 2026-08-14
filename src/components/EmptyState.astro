@@ -1,0 +1,16 @@
+---
+import { SearchX } from "lucide-react";
+
+interface Props {
+  title?: string;
+  message?: string;
+}
+
+const { title = "未找到插件。", message = "换个关键词试试，或清除一些筛选条件。" } = Astro.props;
+---
+
+<div class="rounded-xl border border-dashed border-border bg-card/60 px-6 py-16 text-center">
+  <SearchX className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden="true" />
+  <h3 class="mt-4 font-display text-base font-semibold">{title}</h3>
+  <p class="mt-1 text-sm text-muted-foreground">{message}</p>
+</div>

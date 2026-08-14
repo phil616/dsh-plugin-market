@@ -1,0 +1,17 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Hero from "@/components/Hero.astro";
+import PluginExplorer from "@/components/PluginExplorer";
+import { plugins } from "@/data/plugins";
+import { getAllTags } from "@/utils/plugin";
+
+const tags = getAllTags(plugins);
+---
+
+<BaseLayout
+  title="DeepSeek Harness插件市场 — 发现 Harness 插件"
+  description="DeepSeek Harness 的插件目录。浏览、搜索和筛选 Harness 智能体的工具与扩展，复制安装命令，直达原始仓库。"
+>
+  <Hero pluginCount={plugins.length} tagCount={tags.length} />
+  <PluginExplorer client:load plugins={plugins} tags={tags} />
+</BaseLayout>

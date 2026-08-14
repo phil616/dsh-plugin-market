@@ -1,0 +1,196 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/* Class-based dark mode: `.dark` is toggled on <html> by the theme script. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ */
+/* Design tokens                                                       */
+/* ------------------------------------------------------------------ */
+
+@theme {
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Sora Variable", "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+}
+
+/* Semantic colors are runtime CSS variables so Light/Dark/System switching
+   works without rebuilding utilities (see plan §29). */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+}
+
+/* ------------------------------------------------------------------ */
+/* Light / Dark palettes (warm neutral + acid-lime signal accent)      */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --background: oklch(0.981 0.003 110);
+  --foreground: oklch(0.25 0.016 110);
+  --card: oklch(0.997 0.002 110);
+  --card-foreground: oklch(0.25 0.016 110);
+  --muted: oklch(0.953 0.006 110);
+  --muted-foreground: oklch(0.515 0.018 110);
+  --border: oklch(0.902 0.008 110);
+  --accent: oklch(0.495 0.14 130);
+  --accent-soft: oklch(0.93 0.06 125);
+  --ring: oklch(0.62 0.15 130);
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(0.183 0.006 110);
+  --foreground: oklch(0.928 0.005 110);
+  --card: oklch(0.216 0.007 110);
+  --card-foreground: oklch(0.928 0.005 110);
+  --muted: oklch(0.262 0.008 110);
+  --muted-foreground: oklch(0.672 0.012 110);
+  --border: oklch(0.3 0.009 110);
+  --accent: oklch(0.822 0.19 130);
+  --accent-soft: oklch(0.3 0.075 130);
+  --ring: oklch(0.75 0.17 130);
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--background);
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--accent-soft);
+    color: var(--foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--muted-foreground);
+    border: 3px solid var(--background);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Custom utilities                                                    */
+/* ------------------------------------------------------------------ */
+
+@utility shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--container-6xl);
+  padding-inline: 1rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility bg-dots {
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+@utility link-accent {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 4px;
+  transition: color 150ms, text-decoration-color 150ms;
+
+  &:hover {
+    text-decoration-color: var(--accent);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Small decorative helpers                                            */
+/* ------------------------------------------------------------------ */
+
+/* Subtle radial accent wash behind the hero. */
+.hero-glow {
+  background: radial-gradient(
+    ellipse 65% 55% at 50% 0%,
+    color-mix(in oklab, var(--accent) 9%, transparent),
+    transparent 72%
+  );
+}
+
+/* Auto-generated letter placeholder for plugins without an icon (plan §21).
+   Hue is injected inline as `--hue` by PluginIcon.astro / the React explorer. */
+.placeholder-icon {
+  background: hsl(var(--hue) 55% 88%);
+  color: hsl(var(--hue) 50% 30%);
+}
+.dark .placeholder-icon {
+  background: hsl(var(--hue) 32% 21%);
+  color: hsl(var(--hue) 68% 78%);
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion (plan §33: 100–250ms, subtle, reduced-motion aware)          */
+/* ------------------------------------------------------------------ */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
