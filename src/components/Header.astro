@@ -1,6 +1,9 @@
 ---
-import { Menu, X, ExternalLink } from "lucide-react";
+import { ExternalLink, Menu, Plus, X } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle.tsx";
+
+const repositoryUrl = "https://github.com/phil616/dsh-plugin-market";
+const submissionUrl = `${repositoryUrl}/issues/new?template=add-plugin.yml`;
 
 const links = [
   { href: "/plugins", label: "插件" },
@@ -40,7 +43,19 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 
     <div class="flex items-center gap-2">
       <a
-        href="https://code.altasci.com/phil616/deepseek-harness-market"
+        href={submissionUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex h-10 items-center gap-1.5 rounded-xl bg-accent px-2.5 text-sm font-semibold text-accent-foreground shadow-sm transition-opacity duration-150 hover:opacity-90 sm:px-3"
+        aria-label="添加应用到市场"
+        title="添加应用到市场"
+      >
+        <Plus className="h-4 w-4" aria-hidden="true" />
+        <span class="hidden sm:inline">添加应用到市场</span>
+      </a>
+
+      <a
+        href={repositoryUrl}
         target="_blank"
         rel="noopener noreferrer"
         class="hidden items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium text-muted-foreground shadow-sm transition-colors duration-150 hover:border-accent/50 hover:text-foreground sm:inline-flex"
@@ -75,7 +90,15 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
             </a>
           ))}
           <a
-            href="https://code.altasci.com/phil616/deepseek-harness-market"
+            href={submissionUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-1 block rounded-lg bg-accent px-3 py-2.5 text-sm font-semibold text-accent-foreground transition-opacity duration-150 hover:opacity-90"
+          >
+            添加应用到市场 ↗
+          </a>
+          <a
+            href={repositoryUrl}
             target="_blank"
             rel="noopener noreferrer"
             class="mt-1 block rounded-lg border-t border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted hover:text-foreground"
