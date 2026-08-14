@@ -1,0 +1,25 @@
+import type { Plugin } from "@/types/plugin";
+
+// Source: awesome-dsh-plugin/awesome-dsh-plugin
+// Snapshot: 767a47fbff0b4abbf52bdbfc6a39d64abd01ca69 (2026-08-14)
+export const plugin: Plugin = {
+  slug: "jesse-njx-dsh-voice",
+  name: "dsh-voice",
+  description: "语音输入、语音输出：把口述音频转写为用户消息（transcribe），让 agent 朗读回复（speak），本地优先，音频存于 ~/.dsh/voice。",
+  longDescription: "语音输入、语音输出：把口述音频转写为用户消息（transcribe），让 agent 朗读回复（speak），本地优先，音频存于 ~/.dsh/voice。",
+  author: { name: "Jesse-njx", url: "https://github.com/Jesse-njx" },
+  tags: ["Tool"],
+  category: "tool",
+  repository: "https://github.com/Jesse-njx/dsh-voice",
+  installMethods: [
+    {
+      name: "GitHub",
+      description: "直接从上游 GitHub 仓库安装。",
+      command: "dsh plugin --profile web add github:Jesse-njx/dsh-voice",
+    },
+  ],
+  links: [
+    { name: "Awesome DSH Plugin 收录页", url: "https://awesome-dsh-plugin.com/p/Jesse-njx/dsh-voice/" },
+  ],
+};
+

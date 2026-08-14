@@ -26,6 +26,12 @@ const TAG_LABELS: Record<string, string> = {
   UI: "界面",
   Skill: "技能",
   Persona: "人设",
+  Theme: "主题与外观",
+  Session: "会话与消息",
+  Notification: "通知与集成",
+  Model: "模型与账号接入",
+  Development: "开发与运行时",
+  Fun: "娱乐",
 };
 
 /** 返回 tag 的中文显示名；未收录的 tag 原样返回。 */

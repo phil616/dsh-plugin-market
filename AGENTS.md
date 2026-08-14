@@ -88,7 +88,8 @@ export const plugins: Plugin[] = [ /* 已有插件 */, myPlugin ];
 
 已收录的标签映射：`Search` `Web` `Tool` `Git` `Developer` `Automation` `Memory`
 `AI` `Browser` `Files` `Database` `HTTP` `MCP` `Integrations` `Docker`
-`Design` `UI` `Skill` `Persona`。
+`Design` `UI` `Skill` `Persona` `Theme` `Session` `Notification` `Model`
+`Development` `Fun`。
 
 如果插件使用了上述之外的标签，必须在 `src/utils/plugin.ts` 的 `TAG_LABELS`
 中补一行，否则界面会显示英文：
