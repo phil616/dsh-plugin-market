@@ -1,150 +1,143 @@
-# DeepSeek Harness插件市场（DSH插件市场）
+# DSH插件市场
 
-面向 DeepSeek Harness 用户的**纯前端插件展示网站**。展示插件、帮助了解用途与安装方法、提供安装命令和原始仓库链接。
+<p align="center">
+  面向 DeepSeek Harness 用户的开放插件目录。发现好用的扩展，快速了解能力，复制命令即可开始使用。
+</p>
 
-本项目**不是**插件仓库、包管理器、Registry、CDN 或分发服务器 —— 插件文件始终由作者自己的 GitHub / Gitea / npm 地址提供，网站只保存描述性信息和安装说明。
+<p align="center">
+  <a href="https://astro.build/"><img alt="Astro 7" src="https://img.shields.io/badge/Astro-7-BC52EE?logo=astro&logoColor=white"></a>
+  <a href="https://www.typescriptlang.org/"><img alt="TypeScript 5" src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white"></a>
+  <a href="https://tailwindcss.com/"><img alt="Tailwind CSS 4" src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white"></a>
+  <a href="https://dshtool.com/plugins"><img alt="收录插件 300+" src="https://img.shields.io/badge/%E6%94%B6%E5%BD%95%E6%8F%92%E4%BB%B6-300%2B-14B8A6"></a>
+  <a href="./LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-22C55E.svg"></a>
+</p>
 
-> **免责声明:** 插件由各自的作者独立维护。本站展示不代表对插件安全性的保证，
-> 安装前请自行检查插件的源代码、许可证与安全性。
+<p align="center">
+  <a href="https://dshtool.com/"><strong>在线浏览</strong></a>
+  ·
+  <a href="https://dshtool.com/plugins">全部插件</a>
+  ·
+  <a href="https://github.com/phil616/dsh-plugin-market/issues/new?template=add-plugin.yml">添加应用到市场</a>
+</p>
 
----
+DSH插件市场是一座轻量、开放、可核验的 DeepSeek Harness 插件索引。它把分散在不同仓库中的插件信息整理到一个清晰的入口，让用户用更短的路径完成搜索、比较、阅读说明和复制安装命令。
+
+> [!IMPORTANT]
+> 本项目不是插件仓库、包管理器、Registry、CDN 或分发服务器。网站不托管、不下载、不执行任何插件；插件文件与发布内容始终由原作者维护。
+
+## 为什么使用 DSH插件市场
+
+- **发现更高效**：集中浏览 300+ 个公开插件，支持名称、描述、标签和作者的前端模糊搜索。
+- **信息更清楚**：统一展示用途、作者、标签、仓库、文档、许可证和安装方法。
+- **安装更直接**：按 profile 生成安装命令，一键复制，但绝不在网页中自动执行。
+- **来源可核验**：每个条目均指向原始公开仓库，重要信息可自行复查。
+- **体验更轻快**：Astro 静态构建、React Islands、分页浏览，以及明暗主题支持。
+- **部署更简单**：没有账户、数据库、后端或运行时 API，构建产物可直接托管。
+
+## 功能概览
+
+| 能力 | 说明 |
+| --- | --- |
+| 插件发现 | 精选推荐、全部列表、标签聚合与帮助资源 |
+| 搜索筛选 | Fuse.js 前端模糊搜索、标签筛选、排序和固定分页 |
+| 插件详情 | 简介、详细说明、作者、许可证、原仓库和附加链接 |
+| 安装辅助 | profile 实时替换、安装命令复制，不执行任何命令 |
+| 主题与适配 | 浅色、深色、跟随系统，兼顾桌面端与移动端 |
+| 静态交付 | 无后端、无数据库、无追踪，可部署到常见静态平台 |
 
 ## 技术栈
 
 | 层 | 选型 |
 | --- | --- |
-| 框架 | Astro（静态构建 + Islands） |
-| 语言 | TypeScript |
-| 样式 | Tailwind CSS v4（CSS-first 配置）+ CSS Variables |
-| 交互组件 | React（仅搜索 / 筛选 / 复制 / 主题切换） |
-| 搜索 | Fuse.js（前端模糊搜索） |
+| 框架 | Astro 7（静态构建 + Islands） |
+| 语言 | TypeScript 5 |
+| 样式 | Tailwind CSS 4 + CSS Variables |
+| 交互 | React 19 |
+| 搜索 | Fuse.js |
 | 图标 | Lucide |
 
-## 快速开始
+## 本地开发
+
+需要 Node.js 和 npm。
 
 ```bash
+git clone https://github.com/phil616/dsh-plugin-market.git
+cd dsh-plugin-market
 npm install
-npm run dev        # 开发
-npm run build      # 构建，输出 dist/
-npm run preview    # 预览构建产物
-npm run check      # 类型检查（astro check）
+npm run dev
 ```
 
-构建产物为纯静态文件（HTML / CSS / JS / 图片 / JSON），可直接部署到
-Nginx、Cloudflare Pages、GitHub Pages 或任意静态 Web Server，无需任何后端。
+开发服务器默认运行在 `http://localhost:4321`。
 
-## 页面
+```bash
+npm run check      # Astro / TypeScript 类型检查
+npm run build      # 生产构建，输出到 dist/
+npm run preview    # 本地预览生产构建
+```
+
+## 页面与数据流
 
 | 路由 | 说明 |
 | --- | --- |
-| `/` | 首页：Hero + 搜索 + 精选插件 + 全部插件（标签筛选 / 排序） |
+| `/` | 搜索、精选插件、标签筛选、排序与分页 |
 | `/plugins` | 全部插件列表 |
-| `/plugins/[slug]` | 插件详情页：介绍、标签、作者、安装命令（复制 + profile 替换）、仓库链接 |
-| `/help` | 帮助：文档 / 资源 / 软件等辅助条目（`category: "help"`） |
-| `/tags` | 全部标签 |
-| `/tags/[tag]` | 某标签下的插件 |
-| `/about` | 关于与免责声明 |
-| `/404` | 自定义 404 |
+| `/plugins/[slug]` | 自动生成的插件详情页 |
+| `/help` | 文档、资源和辅助软件 |
+| `/tags`、`/tags/[tag]` | 标签索引与标签详情 |
+| `/about` | 项目定位、安全边界与免责声明 |
 
-## 目录结构
+插件数据只有一个来源：`src/data/plugins/` 下的 TypeScript 文件。页面、详情路由、搜索索引和标签均在构建时自动生成，不依赖数据库或远程 API。
 
 ```text
-public/                  # favicon、robots.txt
 src/
-├── components/          # Astro 静态组件 + React Islands
-│   ├── Header.astro / Footer.astro / Hero.astro
-│   ├── PluginCard.astro / PluginGrid.astro / TagBadge.astro / EmptyState.astro
-│   ├── ThemeToggle.tsx / SearchBox.tsx / PluginFilter.tsx
-│   ├── PluginExplorer.tsx   # 首页搜索 + 筛选 + 列表（唯一的大 Island）
-│   └── InstallBox.tsx       # 详情页安装命令（profile 替换 + 复制）
-├── data/plugins/        # 插件数据（唯一数据源），一个插件一个文件
-├── layouts/             # BaseLayout（SEO/主题脚本）、PluginLayout
-├── pages/               # 路由页面
-├── styles/global.css    # Tailwind v4 主题、Light/Dark/System 色板
-├── types/plugin.ts      # 插件数据模型
-└── utils/               # 排序/标签、Fuse.js 搜索、安装命令工具
+├── components/          # Astro 组件与 React Islands
+├── data/plugins/        # 插件数据，一个插件一个文件
+├── layouts/             # 页面布局
+├── pages/               # Astro 静态路由
+├── styles/              # 全局主题与样式
+├── types/plugin.ts      # Plugin 数据模型
+└── utils/               # 搜索、排序、标签与安装命令工具
 ```
 
-## 插件维护指南
+## 添加应用到市场
 
-> 贡献者与 AI 智能体请先阅读 [AGENTS.md](./AGENTS.md)，再按下面指南操作。
+最简单的方式是填写专用的 [应用收录申请](https://github.com/phil616/dsh-plugin-market/issues/new?template=add-plugin.yml)。表单会引导你提供应用名称、公开仓库、作者、简介、分类、标签、安装命令、文档和许可证等必要信息。
 
-插件数据是纯 TypeScript 文件，所有改动都是"改源码 + 重新构建"，无需数据库、后台或 API。
+也欢迎直接提交 Pull Request：
 
-### 编辑已有插件
+1. 阅读 [AGENTS.md](./AGENTS.md) 中的数据模型和硬性规则。
+2. 在 `src/data/plugins/` 新建唯一、kebab-case 的 `<slug>.ts` 数据文件。
+3. 在 `src/data/plugins/index.ts` 注册该条目；使用新标签时同步更新 `TAG_LABELS`。
+4. 运行 `npm run check` 和 `npm run build`。
+5. 提交 PR，并确保所有描述、链接和安装命令与原仓库一致。
 
-1. 打开 `src/data/plugins/<slug>.ts`（例如 `open-design.ts`）。
-2. 按需修改字段，保存。
-3. 执行 `npm run build` 重新生成 `dist/`。
+真实插件不要添加 `example: true`。网站不接受插件二进制、镜像、下载代理或自动安装逻辑。
 
-### 新增插件
+## 部署
 
-1. 在 `src/data/plugins/` 下新建 `<slug>.ts`，导出一个 `Plugin` 对象（字段定义见 `src/types/plugin.ts`）：
-
-```ts
-import type { Plugin } from "@/types/plugin";
-
-export const myPlugin: Plugin = {
-  slug: "my-plugin",            // 唯一标识，决定 URL：/plugins/my-plugin
-  name: "我的插件",             // 显示名称
-  description: "一句话简介（显示在卡片上）",
-  longDescription: "详细介绍（显示在详情页）",
-  author: { name: "作者名", url: "https://github.com/xxx" },
-  tags: ["Tool", "Developer"],  // 英文值；界面显示中文，见下方"标签映射"
-  category: "tool",             // "tool"（默认，智能体工具）或 "help"（文档 / 资源 / 软件，收录到 /help）
-  repository: "https://github.com/xxx/harness-my-plugin",
-  homepage: "https://github.com/xxx/harness-my-plugin", // 可选
-  documentation: "https://...",                          // 可选
-  license: "MIT",               // 可选
-  installMethods: [
-    {
-      name: "npm",
-      description: "从 npm 仓库安装。",
-      command: "dsh plugin --profile web add @example/my-plugin",
-    },
-  ],
-  links: [],                    // 可选：附加链接
-  featured: false,              // true 时进入首页"精选插件"
-  deprecated: false,            // true 时显示"已弃用"提示
-  example: true,                // UI mock 数据标记；真实插件请移除
-};
+```bash
+npm run build
 ```
 
-2. 在 `src/data/plugins/index.ts` 的 `plugins` 数组中加入该插件。
-3. `npm run build`。
+`dist/` 是完整静态产物，可部署到 Cloudflare Workers Static Assets、Cloudflare Pages、GitHub Pages、Nginx 或任意静态 Web Server。发布前请确认 `astro.config.ts` 中的 `site` 与 `public/robots.txt` 中的 Sitemap 均使用真实域名。
 
-### 删除插件
+## 安全边界
 
-1. 从 `src/data/plugins/index.ts` 的 `plugins` 数组中移除该条目。
-2. 删除（或归档）对应的 `<slug>.ts` 文件。
-3. `npm run build`。
+- 安装命令只作为文本展示和复制，网页不会调用 shell 或自动执行命令。
+- 所有外链使用 HTTPS，并以 `noopener noreferrer` 的新窗口方式打开。
+- 不渲染未经处理的 HTML，不使用 iframe，不提供上传或下载代理。
+- 收录仅表示信息可被展示，不构成对第三方插件安全性、可用性或持续维护的保证。
 
-### 标签映射
+安装任何第三方插件前，请检查其源代码、许可证、安装脚本和所需权限。
 
-插件的 `tags` 使用英文值（如 `Search`、`Memory`），用于 URL（`/tags/search`）与筛选匹配；
-界面显示的中文来自 `src/utils/plugin.ts` 中的 `TAG_LABELS` 映射表。**新增插件用到新标签时，
-请同步在该表中加入 `标签英文: "中文"` 条目**，否则界面会原样显示英文。
+## 数据与致谢
 
-### 字段注意事项
+市场条目整理自插件作者的公开仓库，并参考 [Awesome DSH Plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 提供的社区索引。插件功能、版本和安装方式均以原始仓库为准。
 
-- `slug` 一经发布请勿随意修改，否则会破坏已分享的链接与 SEO。
-- 安装命令只是文本：网站只负责显示与复制，绝不执行；`--profile <name>` 部分会被详情页输入框实时替换。
-- 外部链接必须使用 `https://`，所有外链均以新窗口打开（`noopener noreferrer`）。
-- 不要添加 `downloadURL` / `mirrorURL` / `cdnURL` 等字段——市场不负责插件分发。
-- UI 开发用的 mock 数据可加 `example: true`（卡片与详情页显示"示例"徽章）；真实插件不需要该字段。
+## 许可证
 
-## 安全与约束
-
-- 安装命令仅为文本，网站只负责显示与复制，绝不自动执行。
-- 所有外部链接均 `target="_blank" rel="noopener noreferrer"`，不做代理。
-- 不渲染未经处理的 HTML（无 `dangerouslySetInnerHTML`）。
-- 无账户、无数据库、无后端、无上传、无下载代理。
-
-## 部署前
-
-将 `astro.config.ts` 中的 `site` 替换为真实域名，并更新 `public/robots.txt`
-中的 Sitemap 地址。
+项目源码采用 [MIT License](./LICENSE)。目录中收录的第三方插件仍分别适用其原作者声明的许可证。
 
 ---
 
-*DeepSeek Harness插件市场（DSH插件市场）— 极轻量、静态、快速、现代、适合开发者使用的 Harness 插件目录。*
+<p align="center">发现插件，组合能力，让 DeepSeek Harness 更贴近你的工作流。</p>
