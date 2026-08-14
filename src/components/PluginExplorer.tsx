@@ -1,5 +1,12 @@
-import { useMemo, useState, type ReactNode } from "react";
-import { ArrowUpRight, Layers, SearchX, Sparkles } from "lucide-react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Layers,
+  SearchX,
+  Sparkles,
+} from "lucide-react";
 import type { Plugin } from "@/types/plugin";
 import { filterPlugins } from "@/utils/search";
 import { sortPlugins, tagLabel, type SortMode } from "@/utils/plugin";
@@ -10,6 +17,8 @@ interface Props {
   plugins: Plugin[];
   tags: string[];
 }
+
+const PAGE_SIZE = 12;
 
 function PluginCardView({ plugin }: { plugin: Plugin }) {
   const visibleTags = plugin.tags.slice(0, 3);
@@ -89,10 +98,68 @@ function SectionHeading({ icon, title, count }: { icon: ReactNode; title: string
   );
 }
 
+function Pagination({
+  currentPage,
+  totalPages,
+  totalItems,
+  onPageChange,
+}: {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (totalPages <= 1) return null;
+
+  const firstItem = (currentPage - 1) * PAGE_SIZE + 1;
+  const lastItem = Math.min(currentPage * PAGE_SIZE, totalItems);
+
+  return (
+    <nav
+      className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row"
+      aria-label="插件列表分页"
+    >
+      <p className="text-xs text-muted-foreground" aria-live="polite">
+        显示第 {firstItem}–{lastItem} 个，共 {totalItems} 个插件
+      </p>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="inline-flex h-9 items-center gap-1 rounded-xl border border-border bg-card px-3 text-xs font-semibold text-foreground shadow-sm transition-colors hover:border-accent/50 hover:bg-accent-soft/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-card"
+          aria-label="上一页"
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+          上一页
+        </button>
+
+        <span className="min-w-20 text-center font-mono text-xs text-muted-foreground">
+          第 {currentPage} / {totalPages} 页
+        </span>
+
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="inline-flex h-9 items-center gap-1 rounded-xl border border-border bg-card px-3 text-xs font-semibold text-foreground shadow-sm transition-colors hover:border-accent/50 hover:bg-accent-soft/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:bg-card"
+          aria-label="下一页"
+        >
+          下一页
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+        </button>
+      </div>
+    </nav>
+  );
+}
+
 export default function PluginExplorer({ plugins, tags }: Props) {
   const [query, setQuery] = useState("");
   const [tag, setTag] = useState<string | null>(null);
   const [sort, setSort] = useState<SortMode>("featured");
+  const [currentPage, setCurrentPage] = useState(1);
+  const resultsStartRef = useRef<HTMLDivElement>(null);
 
   const isFiltering = query.trim().length > 0 || tag !== null;
 
@@ -102,9 +169,37 @@ export default function PluginExplorer({ plugins, tags }: Props) {
 
   const featured = useMemo(() => plugins.filter((p) => p.featured), [plugins]);
 
+  const totalPages = Math.ceil(visible.length / PAGE_SIZE);
+  const paginatedVisible = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return visible.slice(start, start + PAGE_SIZE);
+  }, [currentPage, visible]);
+
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+    setCurrentPage(1);
+  };
+
+  const handleTagChange = (value: string | null) => {
+    setTag(value);
+    setCurrentPage(1);
+  };
+
+  const handleSortChange = (value: SortMode) => {
+    setSort(value);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages || page === currentPage) return;
+    setCurrentPage(page);
+    resultsStartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const clearAll = () => {
     setQuery("");
     setTag(null);
+    setCurrentPage(1);
   };
 
   return (
@@ -112,7 +207,7 @@ export default function PluginExplorer({ plugins, tags }: Props) {
       {/* 搜索框 — 与 Hero 视觉衔接 */}
       <div className="relative z-10 mx-auto -mt-7 max-w-3xl">
         <div className="surface-card p-2 sm:p-3">
-          <SearchBox value={query} onChange={setQuery} />
+          <SearchBox value={query} onChange={handleQueryChange} />
         </div>
         <p className="mt-2.5 text-center text-xs text-muted-foreground">
           按名称、描述、标签或作者搜索
@@ -120,7 +215,7 @@ export default function PluginExplorer({ plugins, tags }: Props) {
       </div>
 
       {isFiltering ? (
-        <div className="mt-10 sm:mt-12">
+        <div ref={resultsStartRef} className="scroll-mt-24 mt-10 sm:mt-12">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
@@ -141,7 +236,7 @@ export default function PluginExplorer({ plugins, tags }: Props) {
 
           {visible.length > 0 ? (
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-              {visible.map((p) => (
+              {paginatedVisible.map((p) => (
                 <li key={p.slug} className="min-w-0">
                   <PluginCardView plugin={p} />
                 </li>
@@ -165,6 +260,12 @@ export default function PluginExplorer({ plugins, tags }: Props) {
               </button>
             </div>
           )}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={visible.length}
+            onPageChange={handlePageChange}
+          />
         </div>
       ) : (
         <>
@@ -185,7 +286,7 @@ export default function PluginExplorer({ plugins, tags }: Props) {
             </div>
           )}
 
-          <div className="mt-12 sm:mt-14">
+          <div ref={resultsStartRef} className="scroll-mt-24 mt-12 sm:mt-14">
             <SectionHeading
               icon={<Layers className="h-4 w-4 text-accent" aria-hidden="true" />}
               title="全部插件"
@@ -195,18 +296,24 @@ export default function PluginExplorer({ plugins, tags }: Props) {
               <PluginFilter
                 tags={tags}
                 activeTag={tag}
-                onTagChange={setTag}
+                onTagChange={handleTagChange}
                 sort={sort}
-                onSortChange={setSort}
+                onSortChange={handleSortChange}
               />
             </div>
             <ul className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-              {visible.map((p) => (
+              {paginatedVisible.map((p) => (
                 <li key={p.slug} className="min-w-0">
                   <PluginCardView plugin={p} />
                 </li>
               ))}
             </ul>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={visible.length}
+              onPageChange={handlePageChange}
+            />
           </div>
         </>
       )}
