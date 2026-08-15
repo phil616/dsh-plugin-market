@@ -2,6 +2,15 @@
   "name": "harness-plugin-market",
   "version": "1.0.0",
   "description": "Harness Plugin Market — a pure static plugin directory for Harness agents. Discover, browse and get install instructions. No hosting, no backend.",
+  "license": "MIT",
+  "homepage": "https://dshtool.com/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phil616/dsh-plugin-market.git"
+  },
+  "bugs": {
+    "url": "https://github.com/phil616/dsh-plugin-market/issues"
+  },
   "private": true,
   "type": "module",
   "scripts": {
