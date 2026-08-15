@@ -117,9 +117,12 @@ src/
 
 ```bash
 npm run build
+npx wrangler deploy
 ```
 
-`dist/` 是完整静态产物，可部署到 Cloudflare Workers Static Assets、Cloudflare Pages、GitHub Pages、Nginx 或任意静态 Web Server。发布前请确认 `astro.config.ts` 中的 `site` 与 `public/robots.txt` 中的 Sitemap 均使用真实域名。
+`wrangler.jsonc` 已将 `dist/` 配置为 Cloudflare Workers Static Assets 目录，并启用静态站点路由与自定义 404 页面。Cloudflare 自动部署应使用 `npm run build` 作为构建命令、`npx wrangler deploy` 作为部署命令。
+
+`dist/` 也可直接部署到 Cloudflare Pages、GitHub Pages、Nginx 或任意静态 Web Server。发布前请确认 `astro.config.ts` 中的 `site` 与 `public/robots.txt` 中的 Sitemap 均使用真实域名。
 
 ## 安全边界
 
